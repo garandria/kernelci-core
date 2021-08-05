@@ -531,6 +531,9 @@ test_plans:
       - blocklist: *kselftest_defconfig_filter
       - passlist: *qemu_labs_filter
 
+  uname:
+    rootfs: debian_buster_nfs
+
   usb:
     rootfs: debian_bullseye_ramdisk
 
@@ -2160,6 +2163,7 @@ test_configs:
       - preempt-rt
       - sleep
       - smc
+      - uname
 
   - device_type: hp-x360-14-G1-sona
     test_plans:
@@ -2482,6 +2486,7 @@ test_configs:
       - baseline
       - baseline-nfs
       - kselftest-alsa
+      - uname
 
   - device_type: minnowboard-turbot-E3826
     test_plans:
