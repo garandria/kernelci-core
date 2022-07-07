@@ -17,9 +17,15 @@ function cleanup()
 
 trap cleanup EXIT
 
+echo "Preparing depot tools"
+cd "/home/${USERNAME}/chromiumos"
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH="/home/${USERNAME}/chromiumos/depot_tools:${PATH}"
+cd ${DATA_DIR}
+
 echo "Preparing environment, branch ${BRANCH}"
 sudo mkdir chromiumos-sdk
-sudo chown user chromiumos-sdk
+sudo chown ${USERNAME} chromiumos-sdk
 cd chromiumos-sdk
 git config --global user.email "bot@kernelci.org"
 git config --global user.name "KernelCI Bot"
