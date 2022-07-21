@@ -39,9 +39,10 @@ staging-gcc-10: &staging-gcc-10
     arc: *arc_defconfig
     arm:
       <<: *arm_defconfig
-      fragments: [crypto]
+      fragments: [crypto, preempt_rt]
       extra_configs:
         - 'at91_dt_defconfig'
+        - 'multi_v7_defconfig+preempt_rt'
       filters:
         - passlist: { defconfig: ['multi_v7_defconfig', 'at91_dt_defconfig'] }
     arm64:
