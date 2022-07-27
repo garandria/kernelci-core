@@ -170,7 +170,12 @@ device_types:
         flash_tarball: 'cros-flash-fixup.tar.gz'
         flash_tarball_compression: 'gz'
         tast_tarball: 'tast.tgz'
-      block_device: detect
+      reference_kernel:
+        image: 'https://storage.chromeos.kernelci.org/images/rootfs/chromeos/chromiumos-grunt/20220711.0/amd64/bzImage'
+        modules: 'https://storage.chromeos.kernelci.org/images/rootfs/chromeos/chromiumos-grunt/20220711.0/amd64/modules.tar.xz'
+      filters:
+        - passlist: {defconfig: ['chromeos-amd-stoneyridge']}
+      block_device: mmcblk1
 
   hp-x360-12b-ca0010nr-n4020-octopus_chromeos: &octopus
     base_name: hp-x360-12b-ca0010nr-n4020-octopus
@@ -240,7 +245,9 @@ device_types:
 test_configs:
 
   - device_type: hp-11A-G6-EE-grunt_chromeos
-    test_plans: []
+    test_plans:
+      - cros-baseline
+      - cros-baseline-fixed
 
   - device_type: asus-C436FA-Flip-hatch_chromeos
     test_plans:
