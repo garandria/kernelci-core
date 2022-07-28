@@ -116,10 +116,14 @@ class KernelCI_API(Database):
         resp = self._get('/'.join(['get_root_node', node_id]))
         return json.loads(resp.text)
 
-    def get_regressions(self, regression_name):
-        """ Get a list of regressions matching regression name"""
-        resp = self._get('?'.join(['regressions', 'name=' + regression_name]))
-        return json.loads(resp.text)
+    def get_regressions_by_node_id(self, node_id):
+        """ Get a list of regressions matching node_id"""
+        params = {
+            "kind": "regression",
+            "parent": node_id
+        }
+        resp = self._get('nodes', params=params)
+        return resp.json()
 
     def get_child_nodes_from_parent(self, node_id):
         """Get child nodes from parent"""
