@@ -2535,6 +2535,7 @@ test_configs:
       - kselftest-arm64
       - kselftest-cpufreq
       - kselftest-futex
+      - kselftest-kvm
       - kselftest-lib
       - kselftest-seccomp
       - ltp-crypto
