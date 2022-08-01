@@ -657,6 +657,8 @@ class Metadata:
 class Step:
     """Kernel build step"""
 
+    KVER_RE = re.compile(r'^v([\d]+)\.([\d]+)')
+
     def __init__(self, kdir, output_path=None, log=None, reset=False):
         """Each Step deals with a part of the build and its related meta-data
 
@@ -747,6 +749,14 @@ class Step:
                 print("Missing required option: {}".format(key))
                 res = False
         return res
+
+    def _check_min_kver(self, major, minor):
+        kver = self._meta.get('bmeta', 'revision', 'describe_verbose')
+        m = self._KVER_RE.match(kver)
+        if m and len(m.groups()) == 2:
+            k_major, k_minor = (int(g) for g in m.groups())
+            return k_major >= major and k_minor >= minor
+        return False
 
     def _add_run_step(self, status, jopt=None, action=''):
         start_time = datetime.fromtimestamp(self._start_time).isoformat()
@@ -1453,7 +1463,6 @@ class MakeSelftests(Step):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._kver_re = re.compile(r'^v([\d]+)\.([\d]+)')
 
     @property
     def name(self):
@@ -1465,12 +1474,7 @@ class MakeSelftests(Step):
         Return True if the kselftest config fragment is enabled in the build
         meta-data, or False otherwise.
         """
-        kver = self._meta.get('bmeta', 'revision', 'describe_verbose')
-        m = self._kver_re.match(kver)
-        if m and len(m.groups()) == 2:
-            major, minor = (int(g) for g in m.groups())
-            return major >= 5 and minor >= 10
-        return False
+        return self._check_min_kver(5, 10)
 
     def run(self, jopt=None, verbose=False, opts=None):
         """Make the kernel selftests
@@ -1485,8 +1489,16 @@ class MakeSelftests(Step):
         opts = {
             'FORMAT': '.xz',
         }
-        res = self._make('gen_tar', jopt, verbose, opts,
-                         'tools/testing/selftests')
+        if self._check_min_kver(5, 20):
+            # Once v5.20 has been released and a new LTS has been declared then
+            # we can always run this command and bump the v5.10 version test
+            # for kselftest altogether.
+            res = self._make('kselftest-gen_tar', jopt, verbose, opts)
+        else:
+            res = self._make('headers', jopt, verbose)
+            if res:
+                res = self._make('gen_tar', jopt, verbose, opts,
+                                 'tools/testing/selftests')
         return self._add_run_step(res, jopt)
 
     def _get_kselftests(self, kselftest_tarball):
