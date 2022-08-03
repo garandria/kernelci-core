@@ -59,7 +59,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
    pkg-config
 
 # perf x86
-RUN apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
    libbabeltrace-dev \
    libcap-dev \
    libdw-dev \
@@ -74,7 +74,7 @@ RUN apt-get install --no-install-recommends -y \
    systemtap-sdt-dev
 
 # perf arm
-RUN apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
    libbabeltrace-dev:armhf \
    libcap-dev:armhf \
    libdw-dev:armhf \
@@ -89,7 +89,7 @@ RUN apt-get install --no-install-recommends -y \
    systemtap-sdt-dev:armhf
 
 # perf arm64
-RUN apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
    libbabeltrace-dev:arm64 \
    libcap-dev:arm64 \
    libdw-dev:arm64 \
