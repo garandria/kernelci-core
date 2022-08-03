@@ -25,6 +25,10 @@ arch_defconfigs: &arch_defconfigs
     filters:
       - regex: { defconfig: 'defconfig' }
       - blocklist: { kernel: ['v3.', 'v4.4', 'v4.9', 'v4.14'] }
+  sparc: &sparc_defconfig
+    base_defconfig: 'sparc64_defconfig'
+    filters:
+      - regex: { defconfig: 'sparc64_defconfig' }
   x86_64: &x86_64_defconfig
     base_defconfig: 'x86_64_defconfig'
     filters:
@@ -55,6 +59,7 @@ staging-gcc-10: &staging-gcc-10
     i386: *i386_defconfig
     mips: *mips_defconfig
     riscv: *riscv_defconfig
+    sparc: *sparc_defconfig
     x86_64: &x86_64_defconfig-staging
       <<: *x86_64_defconfig
       fragments: [amdgpu, crypto, ima, preempt_rt, x86-chromebook]
