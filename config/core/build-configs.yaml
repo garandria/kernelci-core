@@ -416,6 +416,7 @@ build_configs_defaults:
                 kernel: ['v3.', 'v4.4', 'v4.9', 'v4.14']
 
         sparc64: &sparc64_arch
+          name: 'sparc'
           base_defconfig: 'sparc64_defconfig'
           extra_configs: ['allnoconfig']
 
